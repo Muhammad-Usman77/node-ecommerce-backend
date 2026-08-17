@@ -197,4 +197,5 @@ module.exports = {
   productFilter,
   filterByPrice,
   pagenation,
+  sorting,
 };
