@@ -97,6 +97,28 @@ async function filterByCategory(req, res){
   })
 }
 
+// async function sorting(req, res){
+//   const product = await Product.find({
+       
+//   }).sort({price: -1}).toLowerCase()
+//   return res.json({
+//     msg:`filter by category`,
+//     data:product
+//   })
+// }
+
+async function sorting(req, res) {
+  const sortBy = req.query.sortBy || "createdAt";
+  const order = Number(req.query.order) || -1;
+
+  const product = await Product.find({})
+    .sort({ [sortBy]: order });
+
+  return res.json({
+    msg: "Products sorted successfully",
+    data: product,
+  });
+}
 
 async function productFilter(req, res) {
   const { category, brand, minPrice, maxPrice } = req.query;
@@ -162,10 +184,17 @@ async function pagenation(req, res){
     data:product,
   })
 }
+
+
 module.exports = {
   createProduct,
   getProducts,
   getProductById,
   deleteProductById,
   updateProductByIdPatch,
+  searchByName,
+  filterByCategory,
+  productFilter,
+  filterByPrice,
+  pagenation,
 };
