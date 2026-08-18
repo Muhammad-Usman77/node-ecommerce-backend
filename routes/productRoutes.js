@@ -17,25 +17,25 @@ const {
 
 const router = express.Router();
 
-router.get("/search", authMiddleware, authorMiddleware, searchByName);
+router.get("/search", authMiddleware, searchByName);
 (router.get(
   "/filterByCategory",
   authMiddleware,
-  authorMiddleware,
+
   filterByCategory,
 ),
   router.get(
     "/proudctFilter",
     authMiddleware,
-    authorMiddleware,
+
     productFilter,
   ));
-router.get("/filterByPrice", authMiddleware, authorMiddleware, filterByPrice);
-router.get("/pagenation", authMiddleware, authorMiddleware, pagenation);
-router.get("/sort", authMiddleware, authorMiddleware, sorting);
+router.get("/filterByPrice", authMiddleware, filterByPrice);
+router.get("/pagenation", authMiddleware, pagenation);
+router.get("/sort", authMiddleware, sorting);
 router.post("/create", authMiddleware, authorMiddleware, createProduct);
-router.get("/getAll", authMiddleware, authorMiddleware, getProducts);
-router.get("/:id", authMiddleware, authorMiddleware, getProductById);
+router.get("/getAll", authMiddleware, getProducts);
+router.get("/:id", authMiddleware, getProductById);
 router.delete("/:id", authMiddleware, authorMiddleware, deleteProductById);
 router.patch("/:id", authMiddleware, authorMiddleware, updateProductByIdPatch);
 module.exports = router;
