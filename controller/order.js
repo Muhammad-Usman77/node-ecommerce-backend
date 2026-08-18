@@ -1,8 +1,6 @@
-const Product = require("../model/productModel")
-const Cart = require("../model/cart")
-const Order = require("../model/order")
-
-
+const Product = require("../model/productModel");
+const Cart = require("../model/cart");
+const Order = require("../model/order");
 
 async function createOrder(req, res) {
   const { shippingAddress } = req.body;
@@ -38,7 +36,7 @@ async function createOrder(req, res) {
   // 5. Calculate total order amount
   const totalAmount = cartItems.reduce(
     (total, item) => total + item.totalPrice,
-    0
+    0,
   );
 
   // 6. Create order
@@ -60,12 +58,54 @@ async function createOrder(req, res) {
   });
 }
 
+async function getAllOrder(req, res) {
+  const getAllOrders = await Order.find({ userId: req.userId });
 
-async function getAllOrder(req, res){
-    const getAllOrders = await Order.find({userId:req.userId})
+  return res.json({
+    msg: `All orders getting successfully`,
+    data: getAllOrders,
+  });
+}
 
-    return res.json({msg:`all orders getting successfully`})
+async function getOrderById(req, res) {
+  const orderById = await Order.findOne({_id:req.params.id, userId: req.userId });
+
+  return res.json({ msg: `Get Order By Id`, data: orderById });
+}
+
+async function orderCancell(req, res){
+    const order = await Order.findOne({
+        userId: req.userId,
+        _id:req.params.id,
+    })
+
+    if(!order){
+        return res.json({
+            msg:`order not found`
+        })
+    };
+
+    if(order.status === "shipped" || order.status === "delivered"){
+        return res.json({
+            msg:`order not cancell`
+        })
+    }
+
+   if(order.status == "cancelled"){
+    return res.json({
+        msg:`Order Already cancelled`
+    })
+   }
+
+   order.status = "cancelled"
+   await order.save()
+return res.json({
+    msg:`Order Cancelled`, data:order
+})
 }
 module.exports = {
-  createOrder, getAllOrder
+  createOrder,
+  getAllOrder,
+  getOrderById, 
+  orderCancell
 };
