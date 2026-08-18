@@ -103,9 +103,65 @@ return res.json({
     msg:`Order Cancelled`, data:order
 })
 }
+async function adminGetAllOrders(req, res) {
+  const orders = await Order.find({});
+
+  return res.json({
+    msg: "All orders fetched successfully",
+    data: orders,
+  });
+}
+// es main userId ki zarorat nh. q kh admin kisi bhi user status update kr skta hai
+async function adminUpdateOrderStatus(req, res) {
+  const { status } = req.body;
+
+  // 1. Check status
+  const allowedStatuses = [
+    "pending",
+    "confirmed",
+    "shipped",
+    "delivered",
+    "cancelled",
+  ];
+
+  if (!status) {
+    return res.status(400).json({
+      msg: "Order status is required",
+    });
+  }
+
+  if (!allowedStatuses.includes(status)) {
+    return res.status(400).json({
+      msg: "Invalid order status",
+      allowedStatuses,
+    });
+  }
+
+  // 2. Find order
+  const order = await Order.findById(req.params.id);
+
+  if (!order) {
+    return res.status(404).json({
+      msg: "Order not found",
+    });
+  }
+
+  // 3. Update status
+  order.status = status;
+
+  await order.save();
+
+  return res.json({
+    msg: "Order status updated successfully",
+    data: order,
+  });
+}
+
 module.exports = {
   createOrder,
   getAllOrder,
   getOrderById, 
-  orderCancell
+  orderCancell,
+  adminGetAllOrders, 
+  adminUpdateOrderStatus
 };
