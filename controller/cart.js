@@ -53,7 +53,7 @@ return res.json({msg:`product successfully addToCart`, data:cart})
 }
 
 async function getCart(req, res){
-    const getCart = await Cart.find({});
+    const getCart = await Cart.find({userId:req.userId});
     return res.json({msg:`All Cart Product`, data:getCart},)
 }
 
