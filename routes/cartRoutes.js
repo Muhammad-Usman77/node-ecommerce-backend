@@ -6,10 +6,10 @@ const { addToCart, getCart, updateCartQuantity, removeFromCart, clearCart } = re
 const router = express.Router()
 
 
-router.post("/addToCart", authMiddleware,authorMiddleware, addToCart)
-router.get("/getCart", authMiddleware, authorMiddleware, getCart)
-router.patch("/cart/update", authMiddleware, authorMiddleware, updateCartQuantity)
-router.delete("/remove", authMiddleware, authorMiddleware, removeFromCart)
-router.delete("/clear", authMiddleware, authorMiddleware, clearCart)
+router.post("/addToCart", authMiddleware, addToCart)
+router.get("/getCart", authMiddleware,  getCart)
+router.patch("/cart/update", authMiddleware,  updateCartQuantity)
+router.delete("/remove", authMiddleware,  removeFromCart)
+router.delete("/clear", authMiddleware,  clearCart)
 
 module.exports = router;
