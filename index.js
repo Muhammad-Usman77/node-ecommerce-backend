@@ -28,8 +28,8 @@ app.get("/admin", authMiddleware, authorMiddleware, (req, res) => {
 });
 app.use("/", userRoutes);
 app.use("/product", productRoutes);
-app.use("/product", cartRoutes)
-app.use("/product", orderRoutes)
+app.use("/cart", cartRoutes)
+app.use("/order", orderRoutes)
 app.listen(process.env.PORT, (req, res) => {
   console.log(`server connected`);
 });
