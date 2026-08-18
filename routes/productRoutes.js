@@ -3,9 +3,12 @@ const {authMiddleware } = require("../middleware/authentication")
 const {authorMiddleware} = require("../middleware/authorization");
 const { createProduct, getProducts, getProductById, deleteProductById , updateProductByIdPatch, searchByName, filterByCategory, productFilter, filterByPrice, pagenation, sorting} = require("../controller/product");
 const { addToCart, getCart, updateCartQuantity, removeFromCart, clearCart } = require("../controller/cart");
+const { createOrder, getAllOrder } = require("../controller/order");
 
 const router = express.Router();
-router.post("/post", authMiddleware,authorMiddleware, addToCart)
+router.get("/getAllOrder", authMiddleware, authorMiddleware, getAllOrder)
+router.post("/createOrder", authMiddleware, authorMiddleware, createOrder)
+router.post("/addToCart", authMiddleware,authorMiddleware, addToCart)
 router.get("/getCart", authMiddleware, authorMiddleware, getCart)
 router.patch("/cart/update", authMiddleware, authorMiddleware, updateCartQuantity)
 router.delete("/remove", authMiddleware, authorMiddleware, removeFromCart)
