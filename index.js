@@ -7,6 +7,8 @@ const { authMiddleware } = require("./middleware/authentication");
 const { authorMiddleware } = require("./middleware/authorization");
 const userRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
+const cartRoutes = require("./routes/cartRoutes")
+const orderRoutes = require("./routes/orderRoutes")
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -26,6 +28,8 @@ app.get("/admin", authMiddleware, authorMiddleware, (req, res) => {
 });
 app.use("/", userRoutes);
 app.use("/product", productRoutes);
+app.use("/product", cartRoutes)
+app.use("/product", orderRoutes)
 app.listen(process.env.PORT, (req, res) => {
   console.log(`server connected`);
 });
