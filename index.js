@@ -6,9 +6,9 @@ const app = express();
 const { authMiddleware } = require("./middleware/authentication");
 const { authorMiddleware } = require("./middleware/authorization");
 const userRoutes = require("./routes/authRoutes");
-const productRoutes = require("./routes/productRoutes")
+const productRoutes = require("./routes/productRoutes");
 app.use(express.json());
-app.use(express.urlencoded({ express: false }));
+app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 dbconnection(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
@@ -25,7 +25,7 @@ app.get("/admin", authMiddleware, authorMiddleware, (req, res) => {
   return res.json({ msg: `welcome admin` });
 });
 app.use("/", userRoutes);
-app.use("/product", productRoutes)
+app.use("/product", productRoutes);
 app.listen(process.env.PORT, (req, res) => {
   console.log(`server connected`);
 });
