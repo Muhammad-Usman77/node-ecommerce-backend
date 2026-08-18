@@ -118,6 +118,44 @@ async function updateCartQuantity(req, res){
 //     })
 // }
 
+
+async function removeFromCart(req, res) {
+    const { cartId } = req.body;
+if(!cartId){
+    return res.json({
+        msg:`cartId not found or cart not found`
+    })
+}
+    const cart = await Cart.findOne({
+        _id: cartId,
+        userId: req.userId,
+    });
+
+    if (!cart) {
+        return res.status(404).json({
+            msg: "Cart item not found",
+        });
+    }
+
+    if (cart.quantity > 1) {
+        cart.quantity -= 1;
+        cart.totalPrice = cart.quantity * cart.price;
+
+        await cart.save();
+
+        return res.json({
+            msg: "Quantity decreased successfully",
+            cart,
+        });
+    }
+
+    await Cart.findByIdAndDelete(cartId);
+
+    return res.json({
+        msg: "Product removed from cart",
+    });
+}
+
 async function clearCart(req, res){
         const result =  await Cart.deleteMany({
             userId : req.userId,
