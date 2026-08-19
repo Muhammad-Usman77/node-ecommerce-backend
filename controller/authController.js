@@ -54,7 +54,7 @@ async function userLogin(req, res) {
 
   res.cookie("token", token);
 
-  return res.json({ msg: `user successfully login` });
+  return res.json({ msg: `user successfully login`, token });
 }
 
 async function userLogout(req, res) {
