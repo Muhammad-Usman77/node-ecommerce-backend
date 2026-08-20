@@ -9,6 +9,8 @@ const userRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
 const cartRoutes = require("./routes/cartRoutes")
 const orderRoutes = require("./routes/orderRoutes")
+const reviewRoutes = require("./routes/reviewRoutes")
+const wishlistRoutes = require("./routes/wishlistRoutes")
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -30,6 +32,8 @@ app.use("/", userRoutes);
 app.use("/product", productRoutes);
 app.use("/cart", cartRoutes)
 app.use("/order", orderRoutes)
+app.use("/review", reviewRoutes)
+app.use("/wishlist", wishlistRoutes)
 app.listen(process.env.PORT, (req, res) => {
   console.log(`server connected`);
 });
