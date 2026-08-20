@@ -24,6 +24,23 @@ async function createOrder(req, res) {
     });
   }
 
+  for (const item of cartItems) {
+
+  const product = await Product.findById(item.productId);
+
+  if (!product) {
+    return res.status(404).json({
+      msg: `Product ${item.name} not found`,
+    });
+  }
+
+  if (item.quantity > product.stock) {
+    return res.status(400).json({
+      msg: `Not enough stock for ${item.name}`,
+    });
+  }
+}
+
   // 4. Convert cart items into order products
   const products = cartItems.map((item) => ({
     productId: item.productId,
@@ -47,6 +64,16 @@ async function createOrder(req, res) {
     shippingAddress,
   });
 
+// 7. Decrease product stock
+for (const item of cartItems) {
+  await Product.findByIdAndUpdate(
+    item.productId,
+    {
+      $inc: { stock: -item.quantity },
+    }
+  );
+}
+
   // 7. Clear user's cart
   await Cart.deleteMany({
     userId: req.userId,
@@ -56,6 +83,7 @@ async function createOrder(req, res) {
     msg: "Order created successfully",
     data: order,
   });
+
 }
 
 async function getAllOrder(req, res) {
@@ -96,7 +124,14 @@ async function orderCancell(req, res){
         msg:`Order Already cancelled`
     })
    }
-
+for (const item of order.products) {
+  await Product.findByIdAndUpdate(
+    item.productId,
+    {
+      $inc: { stock: item.quantity },
+    }
+  );
+}
    order.status = "cancelled"
    await order.save()
 return res.json({
