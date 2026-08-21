@@ -5,6 +5,8 @@ const { dbconnection } = require("./connection");
 const app = express();
 const { authMiddleware } = require("./middleware/authentication");
 const { authorMiddleware } = require("./middleware/authorization");
+const errorMiddleware = require("./middleware/errorMiddleware")
+const notfoundMiddleware = require("./middleware/notfoundMiddleware");
 const userRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
 const cartRoutes = require("./routes/cartRoutes")
@@ -13,6 +15,7 @@ const reviewRoutes = require("./routes/reviewRoutes")
 const wishlistRoutes = require("./routes/wishlistRoutes")
 const addressRoutes = require("./routes/addressRoutes")
 const paymentRoutes = require("./routes/paymentRoutes");
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
@@ -37,7 +40,10 @@ app.use("/order", orderRoutes)
 app.use("/review", reviewRoutes)
 app.use("/wishlist", wishlistRoutes)
 app.use("/address", addressRoutes)
-app.use("/payment", paymentRoutes);
+app.use("/payment", paymentRoutes)
+// 404 handler
+app.use(notfoundMiddleware)
+app.use(errorMiddleware)
 app.listen(process.env.PORT, (req, res) => {
   console.log(`server connected`);
 });
