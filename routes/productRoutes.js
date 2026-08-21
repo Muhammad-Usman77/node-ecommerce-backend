@@ -1,6 +1,8 @@
 const express = require("express");
 const { authMiddleware } = require("../middleware/authentication");
 const { authorMiddleware } = require("../middleware/authorization");
+const { productSchema, updateProductSchema } = require("../validation/productValidation");
+const validate = require("../middleware/validateMiddleware");
 const upload = require("../middleware/uploads");
 const {
   createProduct,
@@ -28,11 +30,11 @@ router.get("/pagenation", authMiddleware, pagenation);
 router.get("/sort", authMiddleware, sorting);
 
 //crud
-router.post("/create", authMiddleware, authorMiddleware, upload.array("images", 5), createProduct);
+router.post("/create", authMiddleware, authorMiddleware, upload.array("images", 5), validate(productSchema), createProduct);
 router.get("/getAll", authMiddleware, getProducts);
 router.get("/:id", authMiddleware, getProductById);
 router.delete("/:id", authMiddleware, authorMiddleware, deleteProductById);
-router.patch("/:id", authMiddleware, authorMiddleware, updateProductByIdPatch);
+router.patch("/:id", authMiddleware, authorMiddleware, validate(updateProductSchema), updateProductByIdPatch);
 
 //router.
 module.exports = router;
