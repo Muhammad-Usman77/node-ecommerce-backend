@@ -1,6 +1,6 @@
 const Wishlist = require("../model/wishlist");
 const Product = require("../model/productModel");
-
+const AppError = require("../utils/AppErrors")
 async function addToWishlist(req, res) {
 
   const { productId } = req.body;
@@ -82,6 +82,12 @@ async function removeFromWishlist(req, res) {
   });
 }
 
+async function testError(req, res) {
+  throw new AppError(
+    "Testing custom error",
+    404
+  );
+}
 module.exports = {
-  addToWishlist, getMyWishlist, removeFromWishlist
+  addToWishlist, getMyWishlist, removeFromWishlist, testError
 };
