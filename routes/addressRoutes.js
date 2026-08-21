@@ -1,7 +1,8 @@
 const express = require("express");
 
 const { authMiddleware } = require("../middleware/authentication");
-
+const { addressSchema } = require("../validation/addressValidation");
+const validate = require("../middleware/validateMiddleware");
 const {
   addAddress,
   getMyAddresses,
@@ -13,7 +14,7 @@ const {
 const router = express.Router();
 
 // Add Address
-router.post("/add", authMiddleware, addAddress);
+router.post("/add", authMiddleware, validate(addressSchema), addAddress);
 
 // Get My All Addresses
 router.get("/my", authMiddleware, getMyAddresses);
