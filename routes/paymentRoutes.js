@@ -1,7 +1,8 @@
 const express = require("express");
 
 const { authMiddleware } = require("../middleware/authentication");
-
+const { paymentSchema } = require("../validation/paymentValidation");
+const validate = require("../middleware/validateMiddleware");
 const {
   createPayment, getMyPayments, updatePaymentStatus,
   refundPayment
@@ -19,6 +20,7 @@ router.patch(
 router.post(
   "/create",
   authMiddleware,
+  validate(paymentSchema),
   createPayment
 );
 
