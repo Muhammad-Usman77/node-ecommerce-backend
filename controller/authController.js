@@ -1,6 +1,13 @@
 const User = require("../model/authModel");
 const jwt = require("jsonwebtoken");
-const bycrypt = require("bcrypt");
+const bcrypt = require("bcrypt");
+  // res.cookie("token", token);
+const cookieOptions = {
+  httpOnly: true,
+  secure: process.env.NODE_ENV === "production",
+  sameSite: "lax",
+};
+
 async function userCreate(req, res) {
   const { name, email, password } = req.body;
 
@@ -14,17 +21,23 @@ async function userCreate(req, res) {
       msg: `user already exist`,
     });
   }
-  const hashedPassword = await bycrypt.hash(password, 10);
+  const hashedPassword = await bcrypt.hash(password, 10);
   const user = await User.create({
     name,
     email,
     password: hashedPassword,
   });
 
-  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+  // const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+const token = jwt.sign(
+  { id: user.id },
+  process.env.JWT_SECRET,
+  {
+    expiresIn: "7d",
+  }
+);
 
-  res.cookie("token", token);
-
+  res.cookie("token", token, cookieOptions);
   return res.json({ msg: `account successfully created` });
 }
 
@@ -40,12 +53,12 @@ async function userLogin(req, res) {
   const user = await User.findOne({ email });
 
   if (!user) {
-    return res.json({
-      msg: `email or password is not correct`,
+    return res.status(401).json({
+      msg: `Email or password is incorrect`,
     });
   }
 
-  const isCorrectPassword = await bycrypt.compare(password, user.password);
+  const isCorrectPassword = await bcrypt.compare(password, user.password);
   if (!isCorrectPassword) {
     return res.json({ msg: `email or password in incorrect` });
   }
@@ -58,7 +71,7 @@ async function userLogin(req, res) {
 }
 
 async function userLogout(req, res) {
-  res.clearCookie("token");
+  res.clearCookie("token", cookieOptions);
 
   return res.json({ msg: `user successfully logout` });
 }
