@@ -22,7 +22,7 @@
 
 const jwt = require("jsonwebtoken");
 
-async function authMiddleware(req, res, next) {
+ function authMiddleware(req, res, next) {
   let token;
 
   // 1. First check Authorization Bearer Token
@@ -33,7 +33,7 @@ async function authMiddleware(req, res, next) {
   }
 
   // 2. If Bearer Token is not available, check cookie
-  if (!token && req.cookies.token) {
+  if (!token && req.cookies?.token) {
     token = req.cookies.token;
   }
 
@@ -46,6 +46,13 @@ async function authMiddleware(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+if (!decoded.id) {
+  return res.status(401).json({
+    msg: "Invalid token",
+  });
+}
+
 
     req.userId = decoded.id;
 
