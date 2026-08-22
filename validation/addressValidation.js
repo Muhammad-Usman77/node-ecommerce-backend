@@ -20,7 +20,7 @@ const addressSchema = Joi.object({
     .min(5)
     .max(200)
     .required(),
-});
+}).unknown(false);
 
 module.exports = {
   addressSchema,
