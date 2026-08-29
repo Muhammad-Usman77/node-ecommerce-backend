@@ -63,11 +63,16 @@ async function userLogin(req, res) {
     return res.json({ msg: `email or password in incorrect` });
   }
 
-  const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);
+  const token = jwt.sign({ id: user.id, role:user.role }, process.env.JWT_SECRET);
 
   res.cookie("token", token);
 
-  return res.json({ msg: `user successfully login`, token });
+  return res.json({ msg: `user successfully login`,  user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,   // ✅ YEH SABSE ZAROORI LINE HAI
+    }, token });
 }
 
 async function userLogout(req, res) {
