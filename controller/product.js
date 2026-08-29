@@ -2,7 +2,8 @@ const Product = require("../model/productModel");
 
 async function createProduct(req, res) {
   const body = req.body;
-
+  console.log("BODY RECEIVED:", req.body);      // ✅ Add karein
+  console.log("FILES RECEIVED:", req.files); 
   if (
     !body ||
     !body.name ||
@@ -56,16 +57,35 @@ async function deleteProductById(req, res) {
   return res.json({ msg: `deleted By Id`, data: product });
 }
 
+// async function updateProductByIdPatch(req, res) {
+//   const product = await Product.findByIdAndUpdate(
+//     req.params.id,
+//      { $set: req.body,}, 
+//     {  new:true }
+// );
+
+//   return res.json({ msg: `Product updated particially`, data: product });
+// }
 async function updateProductByIdPatch(req, res) {
+  const updateData = { ...req.body };
+
+  // ✅ Agar naye images aayi hain, unhe bhi add karein
+  if (req.files && req.files.length > 0) {
+    updateData.images = req.files.map((file) => file.path);
+  }
+
   const product = await Product.findByIdAndUpdate(
     req.params.id,
-     { $set: req.body,}, 
-    {  new:true }
-);
+    { $set: updateData },
+    { new: true }
+  );
 
-  return res.json({ msg: `Product updated particially`, data: product });
+  if (!product) {
+    return res.status(404).json({ msg: "Product not found" });
+  }
+
+  return res.json({ msg: `Product updated successfully`, data: product });
 }
-
 
 async function updateProductPutById(req, res) {
   const product = await Product.findByIdAndUpdate(
