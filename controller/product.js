@@ -15,7 +15,10 @@ async function createProduct(req, res) {
     return res.json({ msg: `these field are required` });
   }
  // Get uploaded image paths
-  const images = req.files.map((file) => file.path);
+  // const images = req.files.map((file) => file.path);
+  const images = req.files.map(
+  (file) => `/uploads/${file.filename}`
+);
   const product = await Product.create({
     name: body.name,
     description: body.description,
