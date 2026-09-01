@@ -17,6 +17,7 @@ const limiter = rateLimit({
     message: "Too many requests, please try again later.",
   },
 });
+const User = require("./model/authModel")
 const { authMiddleware } = require("./middleware/authentication");
 const { authorMiddleware } = require("./middleware/authorization");
 const errorMiddleware = require("./middleware/errorMiddleware")
@@ -50,10 +51,28 @@ dbconnection(process.env.MONGO_URI)
 app.get("/check", (req, res) => {
   return res.end(`checking for ecommerce backend flow `);
 });
-app.get("/profile", authMiddleware, (req, res) => {
-  return res.json({ msg: `welcome to profile` });
-});
+// app.get("/profile", authMiddleware, (req, res) => {
+//   return res.json({ msg: `welcome to profile` });
+// });
+app.get("/profile", authMiddleware, async (req, res) => {
+  console.log("PROFILE ROUTE HIT — req.user:", req.userId);   // ✅ Debug print
 
+  const user = await User.findById(req.userId).select("-password");
+
+  if (!user) {
+    return res.status(404).json({ msg: "User not found" });
+  }
+
+  return res.json({
+    msg: "Profile fetched",
+    user: {
+      id: user._id,
+      name: user.name,
+      email: user.email,
+      role: user.role,
+    },
+  });
+});
 app.get("/admin", authMiddleware, authorMiddleware, (req, res) => {
   return res.json({ msg: `welcome admin` });
 });
