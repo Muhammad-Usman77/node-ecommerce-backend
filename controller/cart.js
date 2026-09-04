@@ -5,6 +5,11 @@ async function addToCart(req, res){
 
     //     console.log("REQ BODY:", req.body);
     // console.log("CONTENT TYPE:", req.headers["content-type"]);
+     console.log("═══ ADD TO CART ═══");
+    console.log("req.userId:", req.userId);
+    console.log("productId, quantity:", req.body);
+    console.log("════════════════════");
+
     const {productId, quantity} = req.body;
 
     if(!productId || !quantity){
@@ -53,7 +58,11 @@ return res.json({msg:`product successfully addToCart`, data:cart})
 }
 
 async function getCart(req, res){
+    console.log("═══ GET CART ═══");
+    console.log("req.userId:", req.userId);
     const getCart = await Cart.find({userId:req.userId});
+     console.log("Items found:", getCart.length);
+    console.log("═════════════════");
     return res.json({msg:`All Cart Product`, data:getCart},)
 }
 
@@ -62,13 +71,15 @@ async function updateCartQuantity(req, res){
 
     if(!cartId|| !quantity){
         return res.json({
-            msg:`cardId and quantity is required`
+            msg:`cartId and quantity are required`
         })
     }
 
-    if(quantity<=0){
-        return json.res({msg:`qunatity must be greter than 0`})
-    }
+    if (quantity <= 0) {
+  return res.status(400).json({
+    msg: "Quantity must be greater than 0",
+  });
+}
 
     const cart = await Cart.findOne({
         _id :cartId,
@@ -90,33 +101,6 @@ async function updateCartQuantity(req, res){
         data:cart
     })
 }
-
-// es sy complete 1  product remove hoga. chahy quantity jo bhi ho.
-// async function removeFromCart(req, res){
-//     const {cartId} = req.body;
-
-//     if(!cartId){
-//         return res.json({
-//             msg:`cartId is required`
-//         })
-//     }
-
-//     const cart = await Cart.findByIdAndDelete({
-//         _id :cartId,
-//         userId : req.userId,
-//     })
-
-//     if(!cart){
-//         return res.json({
-//             msg:`cart item not found`
-//         })
-//     }
-//     return res.json({
-//         msg:`Product remove from cart successfully`,
-//         data:cart,
-
-//     })
-// }
 
 
 async function removeFromCart(req, res) {
@@ -167,3 +151,32 @@ async function clearCart(req, res){
          })
 }
 module.exports = {addToCart, getCart, updateCartQuantity, removeFromCart, clearCart}
+
+
+// es sy complete 1  product remove hoga. chahy quantity jo bhi ho.
+// async function removeFromCart(req, res){
+//     const {cartId} = req.body;
+
+//     if(!cartId){
+//         return res.json({
+//             msg:`cartId is required`
+//         })
+//     }
+
+//     const cart = await Cart.findByIdAndDelete({
+//         _id :cartId,
+//         userId : req.userId,
+//     })
+
+//     if(!cart){
+//         return res.json({
+//             msg:`cart item not found`
+//         })
+//     }
+//     return res.json({
+//         msg:`Product remove from cart successfully`,
+//         data:cart,
+
+//     })
+// }
+
