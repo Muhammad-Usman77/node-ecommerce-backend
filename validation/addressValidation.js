@@ -16,6 +16,8 @@ const addressSchema = Joi.object({
     .max(50)
     .required(),
 
+      // ✅ YEH LINE ADD KAREIN
+  isDefault: Joi.boolean().optional(),
   address: Joi.string()
     .min(5)
     .max(200)
