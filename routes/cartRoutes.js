@@ -8,7 +8,7 @@ const router = express.Router()
 
 router.post("/addToCart", authMiddleware, addToCart)
 router.get("/getCart", authMiddleware,  getCart)
-router.patch("/cart/update", authMiddleware,  updateCartQuantity)
+router.patch("/update", authMiddleware,  updateCartQuantity)
 router.delete("/remove", authMiddleware,  removeFromCart)
 router.delete("/clear", authMiddleware,  clearCart)
 
