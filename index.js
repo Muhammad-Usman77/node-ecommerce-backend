@@ -33,9 +33,15 @@ const addressRoutes = require("./routes/addressRoutes")
 const paymentRoutes = require("./routes/paymentRoutes");
 
 app.use(helmet());
+// app.use(
+//   cors({
+//     origin: "http://localhost:3000",
+//     credentials: true,
+//   })
+// );
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: true,
     credentials: true,
   })
 );
@@ -48,8 +54,16 @@ dbconnection(process.env.MONGO_URI)
   .then(() => console.log("MongoDB Connected"))
   .catch((err) => console.log(err));
 
-app.get("/check", (req, res) => {
-  return res.end(`checking for ecommerce backend flow `);
+// app.get("/check", (req,  res) => {
+//   return res.json({msg:`checking for ecommerce backend flow`, success:true});
+// });
+app.get("/test", (req, res) => {
+  console.log("🔥 MOBILE CONNECTED TO BACKEND");
+
+  res.json({
+    success: true,
+    message: "Backend connected successfully",
+  });
 });
 // app.get("/profile", authMiddleware, (req, res) => {
 //   return res.json({ msg: `welcome to profile` });
@@ -87,11 +101,13 @@ app.use("/payment", paymentRoutes)
 // 404 handler
 app.use(notfoundMiddleware)
 app.use(errorMiddleware)
-app.listen(process.env.PORT, (req, res) => {
-  console.log(`server connected`);
+// app.listen(process.env.PORT, (req, res) => {
+//   console.log(`server connected ${process.env.PORT}`);
+// });
+
+app.listen(process.env.PORT, "0.0.0.0", () => {
+  console.log(`🚀 Server running on port ${process.env.PORT}`);
 });
-
-
 /*
 
 security:
