@@ -5,7 +5,8 @@ const { paymentSchema } = require("../validation/paymentValidation");
 const validate = require("../middleware/validateMiddleware");
 const {
   createPayment, getMyPayments, updatePaymentStatus,
-  refundPayment
+  refundPayment,
+  adminGetAllPayments
 } = require("../controller/payment");
 const { authorMiddleware } = require("../middleware/authorization");
 
@@ -37,4 +38,7 @@ router.patch(
   refundPayment
 );
 
+
+// routes/paymentRoutes.js mein naya route
+router.get("/admin/getAll", authMiddleware, authorMiddleware, adminGetAllPayments);
 module.exports = router;
