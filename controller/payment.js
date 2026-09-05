@@ -204,6 +204,12 @@ async function refundPayment(req, res) {
     data: payment,
   });
 }
+// controller/payment.js mein naya function add karna hoga
+async function adminGetAllPayments(req, res) {
+  const payments = await Payment.find({}).populate("orderId");
+  return res.json({ msg: "All payments fetched", data: payments });
+}
+
 module.exports = {
-  createPayment, getMyPayments, updatePaymentStatus, refundPayment
+  createPayment, getMyPayments, updatePaymentStatus, refundPayment, adminGetAllPayments,
 };
