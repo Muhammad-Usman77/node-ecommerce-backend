@@ -37,4 +37,4 @@
 // createAdmin();
 
 // //node createAdmin.js
-// //es commnad ko aik dafa run krna hai. phir aik project makn dobara nh.
+// //es commnad ko aik dafa run krna hai. phir aik project makn dobara nh.    
