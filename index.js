@@ -90,6 +90,7 @@ app.get("/profile", authMiddleware, async (req, res) => {
 app.get("/admin", authMiddleware, authorMiddleware, (req, res) => {
   return res.json({ msg: `welcome admin` });
 });
+// these are the routes for the application
 app.use("/", userRoutes);
 app.use("/product", productRoutes);
 app.use("/cart", cartRoutes)
