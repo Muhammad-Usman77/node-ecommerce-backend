@@ -3,9 +3,12 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
   // res.cookie("token", token);
 const cookieOptions = {
-  httpOnly: true,
-  secure: process.env.NODE_ENV === "production",
-  sameSite: "lax",
+  // httpOnly: true,
+  // secure: process.env.NODE_ENV === "production",
+  // sameSite: "lax",
+   httpOnly: true,
+  secure: true,          // ✅ true karein (ab HTTPS hai)
+  sameSite: "none"
 };
 
 async function userCreate(req, res) {
