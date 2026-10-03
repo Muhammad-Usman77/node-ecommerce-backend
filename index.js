@@ -9,6 +9,8 @@ if (!process.env.JWT_SECRET) {
 const cookieParser = require("cookie-parser");
 const { dbconnection } = require("./connection");
 const app = express();
+// ✅ YEH LINE ADD KAREIN
+app.set('trust proxy', 1);
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 100,
